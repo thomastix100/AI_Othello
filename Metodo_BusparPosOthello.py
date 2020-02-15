@@ -1,7 +1,4 @@
-#Version 1.0
-
-state = [[0,0,0,0],[0,1,2,0],[0,2,1,0],[0,0,0,0]]
-
+state = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 2, 0, 0, 0], [0, 0, 0, 2, 1, 0, 0, 0], [0, 0, 2, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
 
 lista = []
 
@@ -35,6 +32,7 @@ for i in range(len(state)):
         posY = 0
         lisT = []
         for j in range(len(state[i])):
+            
             if state[i][j] == contrincante:
                 if estaDentroDeNegras == 1:
                     verdeEnNegra = 1
@@ -47,38 +45,25 @@ for i in range(len(state)):
                 estaDentroDeBlancas = 1
                 estaDentroDeNegras = 0
 
-            if state[i][j] == player:
-                estaDentroDeNegras = 1
-                estaDentroDeBlancas = 0
-
                 if verdeEnNegra == 1:
                     lisT.append(i)
                     lisT.append(j)
                     lista.append(lisT)
                     lisT = []
-                    
+                    verdeEnNegra = 0
+
+            if state[i][j] == player:
+                estaDentroDeNegras = 1
+                estaDentroDeBlancas = 0
+
                 if verdeEnBlancas == 1:
                     lisT.append(posX)
                     lisT.append(posY)
                     lista.append(lisT)
                     lisT = []
+                    verdeEnBlancas = 0
                 
 
 
 
 print(lista)
-
-                        
-
-
-
-
-
-            
-
-
-
-
-
-
-
