@@ -17,8 +17,8 @@ class App:
         self.frame.pack()
         self.height=600
         self.width=600
-        self.grid_column=3
-        self.grid_row=3
+        self.grid_column=8
+        self.grid_row=8
         self.canvas = Canvas(self.frame, height=self.height, width=self.width)
         self.cellwidth = int(self.canvas["width"])/self.grid_column
         self.cellheight = int(self.canvas["height"])/self.grid_row
@@ -27,6 +27,7 @@ class App:
         self.model=[[0 for x in range(self.grid_column)] for y in range(self.grid_row)]
         self.player = 1
         self.pos=(0,0)
+        self.initial_data()
         
         
         def handler(event, self=self):
@@ -47,7 +48,33 @@ class App:
                 y1 = j * self.cellheight
                 x2 = x1 + self.cellwidth
                 y2 = y1 + self.cellheight
-                self.canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+                self.canvas.create_rectangle(x1, y1, x2, y2, fill="green")
+
+        self.draw_initial_sheet()
+
+
+    def initial_data(self):
+        self.model[3][3]=1
+        self.model[4][4]=1
+        self.model[3][4]=2
+        self.model[4][3]=2
+        self.player = 2
+
+
+    def draw_initial_sheet(self):
+        x=3*self.cellwidth
+        y=3*self.cellheight
+        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
+        x=4*self.cellwidth
+        y=4*self.cellheight
+        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
+        x=3*self.cellwidth
+        y=4*self.cellheight
+        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
+        x=4*self.cellwidth
+        y=3*self.cellheight
+        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
+
         
         #Se captura donde se dio el clip
     def drawChip(self):
@@ -56,10 +83,10 @@ class App:
         #Dibuja un obalo segun el jugador
         if(self.player ==1):
             
-            self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='blue')
+            self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
             self.player=2
         else:
-            self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='red')
+            self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
             self.player=1
             
     #Toma un vector y lo que hace es dibujar todas las fichas encerradas segun el jugador
@@ -71,9 +98,9 @@ class App:
                 x=j*self.cellwidth
                 y=i*self.cellheight
                 if(val ==1):
-                    self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='blue')
+                    self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
                 elif(val ==2):
-                    self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='red')
+                    self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
             
             #Calcula donde dimos click y modifica el modelo
     def __onClick(self, event):
