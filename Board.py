@@ -8,6 +8,9 @@ Created on Tue Sep 25 09:31:26 2018
 
 
 from tkinter import *
+from Othello import Othello
+from alphabeta_search import alphabeta_search
+import time
 
 
 class App:
@@ -15,8 +18,8 @@ class App:
     def __init__(self, master):
         self.frame = Frame(master)
         self.frame.pack()
-        self.height=600
-        self.width=600
+        self.height=400
+        self.width=400
         self.grid_column=8
         self.grid_row=8
         self.canvas = Canvas(self.frame, height=self.height, width=self.width)
@@ -28,6 +31,7 @@ class App:
         self.player = 1
         self.pos=(0,0)
         self.initial_data()
+        self.drawChips()
         
         
         def handler(event, self=self):
@@ -50,31 +54,12 @@ class App:
                 y2 = y1 + self.cellheight
                 self.canvas.create_rectangle(x1, y1, x2, y2, fill="green")
 
-        self.draw_initial_sheet()
-
 
     def initial_data(self):
         self.model[3][3]=1
         self.model[4][4]=1
         self.model[3][4]=2
         self.model[4][3]=2
-        self.player = 2
-
-
-    def draw_initial_sheet(self):
-        x=3*self.cellwidth
-        y=3*self.cellheight
-        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
-        x=4*self.cellwidth
-        y=4*self.cellheight
-        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='white')
-        x=3*self.cellwidth
-        y=4*self.cellheight
-        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
-        x=4*self.cellwidth
-        y=3*self.cellheight
-        self.canvas.create_oval(x,y,x+self.cellwidth,y+self.cellheight, fill='black')
-
         
         #Se captura donde se dio el clip
     def drawChip(self):
@@ -104,25 +89,37 @@ class App:
             
             #Calcula donde dimos click y modifica el modelo
     def __onClick(self, event):
-        
+            telo = Othello()
             i=int(event.y/self.cellheight)
             j=int(event.x/self.cellwidth)
             self.pos =(i,j)
-            if self.model[i][j]==0:
-                self.model[i][j]=self.player
-            if(self.player==1):
-                self.player=2
-            else:
-                self.player=1
-            print(self.model)
             
-            self.drawChips()
-        
-       
+            self.player = telo.to_move(self.model)
+            lisMovValidos = telo.actions(self.model)
+            lisNew = [i,j]
+            movValido = False
+            if self.model[i][j]==0 and lisNew in lisMovValidos:
+                self.model = telo.result(self.model,[i,j])
+                movValido = True
+            if movValido:
+                if(self.player==1):
+                    self.player=2
+                else:
+                    self.player=1
+                self.drawChips()
+            """alpa = alphabeta_search(self.model,telo)
+            print("Maquina pos nueva: ",alpa)
+            self.model = telo.result(self.model,[alpa[0],alpa[1]])
+            self.drawChips()"""
     
     def  start_Game(self):
-        #Hay que llamar a la clase Triki
-        print('start game')
+        telo = Othello()
+        print('*** Start game *** ')
+        print("Jugadas : ",telo.actions(self.model))
+        alpa = alphabeta_search(self.model,telo)
+        print("Maquina pos nueva: ",alpa)
+        self.model = telo.result(self.model,[alpa[0],alpa[1]])
+        self.drawChips()
         
         
 

@@ -10,23 +10,23 @@ def alphabeta_search(state, game):
     infinity = math.inf
 
     # Functions used by alphabeta
-    def max_value(state, alpha, beta):
-        if game.terminal_test(state):
+    def max_value(state, alpha, beta,p):
+        if game.terminal_test(state) or p == 0:
             return game.utility(state, player)
         v = -infinity
         for a in game.actions(state):
-            v = max(v, min_value(game.result(state, a), alpha, beta))
+            v = max(v, min_value(game.result(state, a), alpha, beta,p-1))
             if v >= beta:
                 return v
             alpha = max(alpha, v)
         return v
 
-    def min_value(state, alpha, beta):
-        if game.terminal_test(state):
+    def min_value(state, alpha, beta,p):
+        if game.terminal_test(state) or p == 0 :
             return game.utility(state, player)
         v = infinity
         for a in game.actions(state):
-            v = min(v, max_value(game.result(state, a), alpha, beta))
+            v = min(v, max_value(game.result(state, a), alpha, beta,p-1))
             if v <= alpha:
                 return v
             beta = min(beta, v)
@@ -38,7 +38,7 @@ def alphabeta_search(state, game):
     best_action = None
     if not game.terminal_test(state):   
         for a in game.actions(state):
-            v = min_value(game.result(state, a), best_score, beta)
+            v = min_value(game.result(state, a), best_score, beta,2)
             if v > best_score:
                 best_score = v
                 best_action = a
